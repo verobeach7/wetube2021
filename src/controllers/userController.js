@@ -7,30 +7,14 @@ export const postJoin = async (req, res) => {
     req.body;
   const pageTitle = "Join";
   if (password !== passwordConfirmation) {
-    return res.render("join", {
+    return res.status(400).render("join", {
       pageTitle,
       errorMessage: "Password confirmation deos not match.",
     });
   }
-  /*
-  const userExists = await User.exists({ username });
-  if (userExists) {
-    return res.render("join", {
-      pageTitle,
-      errorMessage: "This username is already taken.",
-    });
-  }
-  const emailExists = await User.exists({ email });
-  if (emailExists) {
-    return res.render("join", {
-      pageTitle,
-      errorMessage: "This email is already taken.",
-    });
-  }
-  */
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
-    return res.render("join", {
+    return res.status(400).render("join", {
       pageTitle,
       errorMessage: "This username or email is already taken.",
     });
@@ -44,6 +28,7 @@ export const postJoin = async (req, res) => {
   });
   return res.redirect("/login");
 };
+
 export const edit = (req, res) => res.send("Edit User");
 export const remove = (req, res) => res.send("Remove User");
 export const login = (req, res) => res.send("Login");
