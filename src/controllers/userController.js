@@ -162,6 +162,15 @@ export const postEdit = async (req, res) => {
     session: { user: _id },
     body: { name, email, username, location },
   } = req;
+  /* 다른 방식
+  const findUsername = await User.findOne({ username });
+  const findEmail = await User.findOne({ email });
+  if (findUsername._id != _id || findEmail._id != _id) {
+    return res.status(400).render("edit-profile", {
+      pageTitle,
+      errorMessage: "This username is already taken.",
+    });
+  } */
   if (username !== req.session.user.username) {
     const exists = await User.exists({ username });
     if (exists) {
