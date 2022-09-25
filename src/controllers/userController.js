@@ -156,8 +156,43 @@ export const finishGithubLogin = async (req, res) => {
 export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
+export const postEdit = async (req, res) => {
+  const pageTitle = "Edit Profile";
+  const {
+    session: { user: _id },
+    body: { name, email, username, location },
+  } = req;
+  if (username !== req.session.user.username) {
+    const exists = await User.exists({ username });
+    if (exists) {
+      return res.status(400).render("edit-profile", {
+        pageTitle,
+        errorMessage: "This username is already taken.",
+      });
+    }
+  }
+  if (email !== req.session.user.email) {
+    const exists = await User.exists({ email });
+    if (exists) {
+      return res.status(400).render("edit-profile", {
+        pageTitle,
+        errorMessage: "This email is already taken.",
+      });
+    }
+  }
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updatedUser;
+  console.log(req.session.user);
+  return res.redirect("/users/edit");
 };
 
 export const see = (req, res) => {

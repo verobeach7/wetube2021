@@ -1,7 +1,10 @@
 extends base
 
 block content 
+    if errorMessage
+        p=errorMessage
     form(method="POST")
+        // name을 설정해야 req.body로 접근할 수 있음
         input(name="name", placeholder="Name", type="text", required, value=loggedInUser.name)
         input(name="email", placeholder="Email", type="email", required, value=loggedInUser.email)
         input(name="username", placeholder="Username", type="text", required, value=loggedInUser.username)
