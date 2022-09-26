@@ -153,6 +153,11 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
+export const logout = (req, res) => {
+  req.session.destroy();
+  return res.redirect("/");
+};
+
 export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
@@ -162,15 +167,6 @@ export const postEdit = async (req, res) => {
     session: { user: _id },
     body: { name, email, username, location },
   } = req;
-  /* 다른 방식
-  const findUsername = await User.findOne({ username });
-  const findEmail = await User.findOne({ email });
-  if (findUsername._id != _id || findEmail._id != _id) {
-    return res.status(400).render("edit-profile", {
-      pageTitle,
-      errorMessage: "This username is already taken.",
-    });
-  } */
   if (username !== req.session.user.username) {
     const exists = await User.exists({ username });
     if (exists) {
@@ -204,10 +200,50 @@ export const postEdit = async (req, res) => {
   return res.redirect("/users/edit");
 };
 
+export const getChangePassword = (req, res) => {
+  if (req.session.user.socialOnly === true) {
+    return res.redirect("/");
+  }
+  console.log("1");
+  return res.render("users/change-password", {
+    pageTitle: "Change Password",
+  });
+};
+
+export const postChangePassword = async (req, res) => {
+  const {
+    session: { user: _id },
+    body: { oldPassword, newPassword, newPasswordConfirmation },
+  } = req;
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The current password is incorrect.",
+    });
+  }
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The password does not match the confirmation.",
+    });
+  }
+  if (oldPassword === newPassword) {
+    return res.status(400).render("users/change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "The new password equals the old one.",
+    });
+  }
+  user.password = newPassword;
+  await user.save();
+  // send notification
+  /* 아래와 같은 방법은 해커가 302 redirect를 프록시를 통해서 막은 후에 이전 세션 데이터를 활용 가능
+  return res.redirect("/users/logout"); */
+  req.session.destroy();
+  return res.redirect("/login");
+};
+
 export const see = (req, res) => {
   res.send(`See User #${req.params.id}`);
-};
-export const logout = (req, res) => {
-  req.session.destroy();
-  return res.redirect("/");
 };

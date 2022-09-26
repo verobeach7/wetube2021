@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
   location: String,
 });
 
+// 스키마를 사용하는 모델에서 함수로 사용 가능, 미들웨어처럼 작동함, model.save() 사용하면 pre hook으로 작동
 userSchema.pre("save", async function () {
   this.password = await bcrypt.hash(this.password, 5);
 });
