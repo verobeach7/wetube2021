@@ -1,3 +1,5 @@
+import multer from "multer";
+
 export const localsMiddleware = (req, res, next) => {
   // session의 데이터를 locals에 넣어서 모든 template에서 활용할 수 있음
   res.locals.loggedIn = Boolean(req.session.loggedIn);
@@ -22,3 +24,5 @@ export const publicOnlyMiddleware = (req, res, next) => {
     return res.redirect("/");
   }
 };
+
+export const uploadFiles = multer({ dest: "uploads/" });
