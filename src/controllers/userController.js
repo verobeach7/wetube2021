@@ -164,11 +164,12 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   const pageTitle = "Edit Profile";
   const {
-    session: { user: _id },
+    session: {
+      user: { _id, avatarUrl },
+    },
     body: { name, email, username, location },
     file,
   } = req;
-  console.log(file);
   if (username !== req.session.user.username) {
     const exists = await User.exists({ username });
     if (exists) {
@@ -190,6 +191,8 @@ export const postEdit = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
+      // file이 폼에 있다면 file.path로 경로를 바꿔주고 없다면 그대로 둠
+      avatarUrl: file ? file.path : avatarUrl,
       name,
       email,
       username,
