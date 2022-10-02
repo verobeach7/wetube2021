@@ -33,6 +33,7 @@ app.use(
 
 // locals를 활용하기 위한 middleware를 만들어 사용
 app.use(localsMiddleware);
+app.use("/uploads", express.static("uploads"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
