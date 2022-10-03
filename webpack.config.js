@@ -18,6 +18,11 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.scss$/,
+        // webpack은 배열의 뒤쪽부터 적용함, 즉, sass->css->style loader 순으로 작동함
+        use: ["style-loader", "css-loader", "sass-loader"],
+      },
     ],
   },
 };
