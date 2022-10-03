@@ -117,7 +117,7 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    console.log(userData);
+    // console.log(userData);
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
@@ -125,7 +125,7 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    console.log(emailData);
+    // console.log(emailData);
     const emailObj = emailData.find(
       (email) => email.primary === true && email.verified === true
     );
@@ -202,7 +202,7 @@ export const postEdit = async (req, res) => {
     { new: true }
   );
   req.session.user = updatedUser;
-  console.log(req.session.user);
+  // console.log(req.session.user);
   return res.redirect("/users/edit");
 };
 
@@ -210,7 +210,7 @@ export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly === true) {
     return res.redirect("/");
   }
-  console.log("1");
+  // console.log("1");
   return res.render("users/change-password", {
     pageTitle: "Change Password",
   });
@@ -252,15 +252,13 @@ export const postChangePassword = async (req, res) => {
 
 export const see = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate("videos");
+  // console.log(user)
   if (!user) {
     return res.status(404).render("404", { pageTitle: "User not found." });
   }
-  const videos = await Video.find({ owner: user._id });
-  console.log(videos);
   return res.render("users/profile", {
     pageTitle: user.name,
     user,
-    videos,
   });
 };
