@@ -34,6 +34,8 @@ app.use(
 // locals를 활용하기 위한 middleware를 만들어 사용
 app.use(localsMiddleware);
 app.use("/uploads", express.static("uploads"));
+// app.use("/static", express.static("assets"));로 설정해도 됨, url에 접근할 때 /static으로 써주면 자동으로 assets폴더로 연결됨
+app.use("/assets", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/users", userRouter);
 app.use("/videos", videoRouter);
