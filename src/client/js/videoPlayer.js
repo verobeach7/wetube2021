@@ -12,6 +12,8 @@ const videoControls = document.getElementById("videoControls");
 let volumeValue = 0.5;
 video.volume = volumeValue;
 let nowPlaying = false;
+let controlsTimeout = null;
+let controlsMovementTimeout = null;
 
 const handlePlayClick = (e) => {
   if (video.paused) {
@@ -100,13 +102,6 @@ const handleTimelineMouseUp = () => {
   }
 };
 
-const handleKeystroke = (event) => {
-  if (event.code == "Space") {
-    event.preventDefault();
-    handlePlayClick();
-  }
-};
-
 const handleFullscreen = () => {
   const fullscreen = document.fullscreenElement;
   if (fullscreen) {
@@ -125,12 +120,37 @@ const handleFullScreenBtn = () => {
   }
 };
 
+const handleKeystroke = (event) => {
+  console.log(event);
+  if (event.code == "Space") {
+    event.preventDefault();
+    handlePlayClick();
+  }
+  if (event.code == "KeyF") {
+    handleFullscreen();
+  }
+  if (event.code == "KeyM") {
+    handleMute();
+  }
+};
+
+const hideControls = () => videoControls.classList.remove("showing");
+
 const handleMouseMove = () => {
+  if (controlsTimeout) {
+    clearTimeout(controlsTimeout);
+    controlsTimeout = null;
+  }
+  if (controlsMovementTimeout) {
+    clearTimeout(controlsMovementTimeout);
+    controlsMovementTimeout = null;
+  }
   videoControls.classList.add("showing");
+  controlsMovementTimeout = setTimeout(hideControls, 3000);
 };
 
 const handleMouseLeave = () => {
-  videoControls.classList.remove("showing");
+  controlsTimeout = setTimeout(hideControls, 1000);
 };
 
 playBtn.addEventListener("click", handlePlayClick);
