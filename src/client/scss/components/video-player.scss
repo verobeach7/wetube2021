@@ -9,6 +9,7 @@
     transition: opacity 0.5s ease-in-out;
     &.showing {
       opacity: 1;
+      transition: none;
     }
     align-items: center;
     border-radius: 10px;

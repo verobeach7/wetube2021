@@ -20,16 +20,7 @@ let controlsMovementTimeout = null;
 
 const hideControls = () => videoControls.classList.remove("showing");
 
-const handlePlayClick = (e) => {
-  if (video.paused) {
-    video.play();
-  } else {
-    video.pause();
-    videoControls.classList.add("showing");
-    clearTimeout(controlsMovementTimeout);
-  }
-  playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
-};
+const showControls = () => videoControls.classList.add("showing");
 
 const handleMute = (e) => {
   if (video.muted) {
@@ -76,6 +67,7 @@ const formatTime = (seconds) => {
 const handleLoadedMetaData = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
   timeline.max = Math.floor(video.duration);
+  showControls();
 };
 
 const handleTimeUpdate = () => {
@@ -126,30 +118,17 @@ const handleFullScreenBtn = () => {
   }
 };
 
-const handleKeystroke = (event) => {
-  console.log(event);
-  videoControls.classList.add("showing");
-  controlsMovementTimeout = setTimeout(hideControls, 3000);
-
-  if (event.code == "Space") {
-    event.preventDefault();
-    handlePlayClick();
-  }
-  if (event.code == "KeyF") {
-    handleFullscreen();
-  }
-  if (event.code == "KeyM") {
-    handleMute();
-  }
-};
-
-const showControlsWhenPaused = () => {
+const handlePlayClick = (e) => {
   if (video.paused) {
+    video.play();
+    controlsTimeout = setTimeout(hideControls, 3000);
+  } else {
+    video.pause();
+    showControls();
     clearTimeout(controlsTimeout);
     controlsTimeout = null;
-    clearTimeout(controlsMovementTimeout);
-    controlsMovementTimeout = null;
   }
+  playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
 const handleMouseMove = () => {
@@ -161,14 +140,35 @@ const handleMouseMove = () => {
     clearTimeout(controlsMovementTimeout);
     controlsMovementTimeout = null;
   }
-  videoControls.classList.add("showing");
-  controlsMovementTimeout = setTimeout(hideControls, 3000);
-  showControlsWhenPaused();
+  showControls();
+  if (!video.paused) {
+    controlsMovementTimeout = setTimeout(hideControls, 3000);
+  }
 };
 
 const handleMouseLeave = () => {
-  controlsTimeout = setTimeout(hideControls, 3000);
-  showControlsWhenPaused();
+  if (!video.paused) {
+    hideControls();
+  }
+};
+
+const handleKeystroke = (event) => {
+  showControls();
+
+  if (event.code == "Space") {
+    event.preventDefault();
+    handlePlayClick();
+    if (video.paused) {
+      clearTimeout(controlsMovementTimeout);
+      controlsMovementTimeout = null;
+    }
+  }
+  if (event.code == "KeyF") {
+    handleFullscreen();
+  }
+  if (event.code == "KeyM") {
+    handleMute();
+  }
 };
 
 playBtn.addEventListener("click", handlePlayClick);
