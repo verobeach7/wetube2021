@@ -155,7 +155,11 @@ export const finishGithubLogin = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  req.session.destroy();
+  // req.session.destroy();
+  req.session.user = null;
+  res.locals.loggedInUser = req.session.user;
+  req.session.loggedIn = false;
+  req.flash("info", "Bye Bye");
   return res.redirect("/");
 };
 
@@ -208,6 +212,7 @@ export const postEdit = async (req, res) => {
 
 export const getChangePassword = (req, res) => {
   if (req.session.user.socialOnly === true) {
+    req.flash("error", "You can't change password.");
     return res.redirect("/");
   }
   // console.log("1");
@@ -243,10 +248,14 @@ export const postChangePassword = async (req, res) => {
   }
   user.password = newPassword;
   await user.save();
-  // send notification
+  req.flash("info", "Password updated");
+
+  req.session.user = null;
+  res.locals.loggedInUser = req.session.user;
+  req.session.loggedIn = false;
   /* 아래와 같은 방법은 해커가 302 redirect를 프록시를 통해서 막은 후에 이전 세션 데이터를 활용 가능
   return res.redirect("/users/logout"); */
-  req.session.destroy();
+  // req.session.destroy();
   return res.redirect("/login");
 };
 
