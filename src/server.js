@@ -23,6 +23,7 @@ app.use((req, res, next) => {
 */
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // session을 사용하기 위해서 선언
 app.use(
