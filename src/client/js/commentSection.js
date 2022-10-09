@@ -18,6 +18,7 @@ const handleSubmit = (event) => {
     // 프론트엔드에서 JSON.stringify를 사용하여 string으로 구성해줌, 백엔드에서 string을 받아 JS object로 바꿔서 사용함
     body: JSON.stringify({ text }),
   });
+  textarea.value = "";
 };
 
 if (form) {
