@@ -23,16 +23,16 @@ block content
         *** PUG의 주석처리 방법 ***
         // 주석처리 하지만 페이지소스 보기에 주석까지 보여짐
         //- 주석처리와 동시에 페이지소스 보기에서도 보이지 않게 함
-        div
-            p=video.description
-            small=video.createdAt 
-        div 
-            small Uploaded by 
-                a(href=`/users/${video.owner._id}`)=video.owner.name
-        if String(video.owner._id) === String(loggedInUser._id)
-            a(href=`${video.id}/edit`) Edit Video &rarr;
-            br
-            a(href=`${video.id}/delete`) Delete Video &rarr;
+    div
+        p=video.description
+        small=video.createdAt 
+    div 
+        small Uploaded by 
+            a(href=`/users/${video.owner._id}`)=video.owner.name
+    if String(video.owner._id) === String(loggedInUser._id)
+        a(href=`${video.id}/edit`) Edit Video &rarr;
+        br
+        a(href=`${video.id}/delete`) Delete Video &rarr;
 
 block scripts 
     script(src="/assets/js/videoPlayer.js")
