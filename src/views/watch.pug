@@ -1,4 +1,5 @@
 extends base.pug
+include mixins/comment
 
 block content
     div#videoContainer(data-id=video._id)
@@ -33,11 +34,15 @@ block content
             br
             a(href=`${video.id}/delete`) Delete Video &rarr;
     if loggedIn
-        div.video__comments
+        div.video__add-comments
             form.video__comment-form#commentForm
                 textarea(cols="30", rows="10", placeholder="Write a nice comment...")#textArea
                 button Add Comment
-
+    div.video__comments
+        ul
+            //- reverse()를 이용하면 배열의 뒤에서부터 보여주게 됨
+            each comment in video.comments.reverse()
+                +comment(comment)
 block scripts 
     script(src="/assets/js/videoPlayer.js")
     script(src="/assets/js/commentSection.js")

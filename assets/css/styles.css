@@ -413,6 +413,22 @@ form label {
   text-decoration: underline;
 }
 
+.video__comments {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+.video__comments .video__comment {
+  padding: 20px;
+  border-radius: 9999px;
+  background-color: white;
+  color: black;
+  margin-bottom: 10px;
+}
+
 .upload__container {
   width: 100%;
 }
