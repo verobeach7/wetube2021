@@ -39,10 +39,13 @@ block content
                 textarea(cols="30", rows="10", placeholder="Write a nice comment...")#textArea
                 button Add Comment
     div.video__comments
-        ul
-            //- reverse()를 이용하면 배열의 뒤에서부터 보여주게 됨
-            each comment in video.comments.reverse()
-                +comment(comment)
+        div.comments__header
+            span 댓글 #{video.comments.length}개
+        div.comments__contents
+            ul
+                //- reverse()를 이용하면 배열의 뒤에서부터 보여주게 됨
+                each comment in video.comments.reverse()
+                    +comment(comment)
 block scripts 
     script(src="/assets/js/videoPlayer.js")
     script(src="/assets/js/commentSection.js")

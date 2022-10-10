@@ -427,6 +427,15 @@ form label {
   background-color: white;
   color: black;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.video__comments .video__comment .fa-comment {
+  font-size: 20px;
+}
+.video__comments .comments__header {
+  padding: 30px;
+  font-size: 18px;
 }
 
 .upload__container {

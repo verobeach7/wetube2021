@@ -1,6 +1,7 @@
 import Video from "../models/Video";
 import Comment from "../models/Comment";
 import User from "../models/User";
+import { async } from "regenerator-runtime";
 
 export const home = async (req, res) => {
   try {
@@ -166,7 +167,7 @@ export const createComment = async (req, res) => {
   }
 
   const userDB = await User.findById(user._id);
-  if (!user) {
+  if (!userDB) {
     return res.sendStatus(404);
   }
   const comment = await Comment.create({
@@ -181,5 +182,36 @@ export const createComment = async (req, res) => {
   userDB.save();
   // 세션 업데이트
   user.comments.push(comment._id);
-  return res.sendStatus(201);
+  return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const deleteComment = async (req, res) => {
+  const {
+    session: {
+      user: { _id: userId },
+    },
+    params: { id: commentId },
+  } = req;
+  const comment = await Comment.findById(commentId);
+  //console.log(comment);
+  if (String(userId) !== String(comment.owner._id)) {
+    return res.sendStatus(403);
+  }
+  const videoId = comment.video;
+  const video = await Video.findById(videoId);
+  if (!video) {
+    return res.sendStatus(404);
+  }
+
+  video.comments.splice(video.comments.indexOf(commentId), 1);
+  video.save();
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.sendStatus(404);
+  }
+  user.comments.splice(user.comments.indexOf(commentId), 1);
+  user.save();
+
+  await Comment.findByIdAndDelete(commentId);
+  return res.sendStatus(200);
 };
