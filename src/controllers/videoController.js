@@ -16,7 +16,6 @@ export const home = async (req, res) => {
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id).populate("owner").populate("comments");
-  console.log(video);
   if (!video) {
     return res.status(404).render("404", { pageTitle: "Video not found." });
   } else {
@@ -170,7 +169,6 @@ export const createComment = async (req, res) => {
   if (!user) {
     return res.sendStatus(404);
   }
-  console.log(user);
   const comment = await Comment.create({
     text,
     owner: user._id,
@@ -178,8 +176,10 @@ export const createComment = async (req, res) => {
   });
   video.comments.push(comment._id);
   video.save();
+  // user는 세션이므로 재로그인 전에는 갱신 안됨, 갱신을 원하면 수동으로 해줘야 험.
   userDB.comments.push(comment._id);
   userDB.save();
-
+  // 세션 업데이트
+  user.comments.push(comment._id);
   return res.sendStatus(201);
 };
