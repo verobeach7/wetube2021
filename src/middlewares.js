@@ -1,4 +1,20 @@
 import multer from "multer";
+import multerS3 from "multer-s3";
+import { S3Client } from "@aws-sdk/client-s3";
+
+const s3 = new S3Client({
+  region: "ap-northeast-2",
+  credentials: {
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET,
+  },
+});
+
+const multerUploader = multerS3({
+  s3: s3,
+  bucket: "wetube-vero",
+  acl: "public-read",
+});
 
 export const localsMiddleware = (req, res, next) => {
   // session의 데이터를 locals에 넣어서 모든 template에서 활용할 수 있음
@@ -33,10 +49,12 @@ export const avatarUpload = multer({
     // bytes: 3000000 = 3mb
     fileSize: 3000000,
   },
+  storage: multerUploader,
 });
 export const videoUpload = multer({
   dest: "uploads/videos/",
   limits: {
     fileSize: 10000000,
   },
+  storage: multerUploader,
 });

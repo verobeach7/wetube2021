@@ -69,23 +69,29 @@ export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
     client_id: process.env.GH_CLIENT,
-    allow_signup: false,
+    allow_signup: true,
     scope: "read:user user:email",
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
+  console.log(finalUrl);
   return res.redirect(finalUrl);
 };
 
 export const finishGithubLogin = async (req, res) => {
   // github에서 받은 코드를 access_token으로 바꾸기
   const baseUrl = "https://github.com/login/oauth/access_token";
+  console.log(GH_CLIENT);
+  console.log(GH_SECRET);
+  console.log(req.query);
   const config = {
     client_id: process.env.GH_CLIENT,
     client_secret: process.env.GH_SECRET,
     code: req.query.code,
   };
+  console.log(code);
   const params = new URLSearchParams(config).toString();
+  console.log(params);
   const finalUrl = `${baseUrl}?${params}`;
   /*
   const data = await fetch(finalUrl, {
@@ -197,7 +203,7 @@ export const postEdit = async (req, res) => {
     _id,
     {
       // file이 폼에 있다면 file.path로 경로를 바꿔주고 없다면 그대로 둠
-      avatarUrl: file ? file.path : avatarUrl,
+      avatarUrl: file ? file.location : avatarUrl,
       name,
       email,
       username,
