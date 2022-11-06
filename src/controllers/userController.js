@@ -69,7 +69,7 @@ export const startGithubLogin = (req, res) => {
   const baseUrl = "https://github.com/login/oauth/authorize";
   const config = {
     client_id: process.env.GH_CLIENT,
-    allow_signup: true,
+    allow_signup: false,
     scope: "read:user user:email",
   };
   const params = new URLSearchParams(config).toString();
@@ -81,8 +81,6 @@ export const startGithubLogin = (req, res) => {
 export const finishGithubLogin = async (req, res) => {
   // github에서 받은 코드를 access_token으로 바꾸기
   const baseUrl = "https://github.com/login/oauth/access_token";
-  console.log(GH_CLIENT);
-  console.log(GH_SECRET);
   console.log(req.query);
   const config = {
     client_id: process.env.GH_CLIENT,
