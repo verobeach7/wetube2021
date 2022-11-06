@@ -31,13 +31,13 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
     /*
     // cookie 유지 시간 설정: 밀리세컨드 단위로 1초 = 1000
     cookie: {
         maxAge: 20000,
     }
     */
-    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
 app.use(flash());
