@@ -73,6 +73,8 @@ export const getUpload = (req, res) => {
 };
 
 export const postUpload = async (req, res) => {
+  let modifiedVideoUrl = "";
+  let modifiedThumbUrl = "";
   const {
     session: {
       user: { _id },
@@ -80,6 +82,7 @@ export const postUpload = async (req, res) => {
     files: { video, thumb },
     body: { title, description, hashtags },
   } = req;
+  const isHeroku = process.env.NODE_ENV === "production";
   /*
   const {
     user: { _id },
@@ -87,12 +90,14 @@ export const postUpload = async (req, res) => {
   const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   */
+  modifiedVideoUrl = `https://${video[0].location.substr(20)}`;
+  modifiedThumbUrl = `https://${thumb[0].location.substr(20)}`;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: video[0].location,
-      thumbUrl: thumb[0].location,
+      fileUrl: isHeroku ? modifiedVideoUrl : video[0].path,
+      thumbUrl: isHeroku ? modifiedThumbUrl : thumb[0].path,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

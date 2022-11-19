@@ -10,16 +10,29 @@ const s3 = new S3Client({
   },
 });
 
+const isHeroku = process.env.NODE_ENV === "production";
+
 const s3ImageUploader = multerS3({
   s3: s3,
-  bucket: "wetube-vero/images",
+  bucket: "wetube-vero",
   acl: "public-read",
+  // bucket 안에 folder 속에 file 분류하기
+  key: function (request, file, ab_callback) {
+    const newFileName = Date.now() + "-" + file.originalname;
+    const fullPath = "images/" + newFileName;
+    ab_callback(null, fullPath);
+  },
 });
 
 const s3VideoUploader = multerS3({
   s3: s3,
-  bucket: "wetube-vero/videos",
+  bucket: "wetube-vero",
   acl: "public-read",
+  key: function (request, file, ab_callback) {
+    const newFileName = Date.now() + "-" + file.originalname;
+    const fullPath = "videos/" + newFileName;
+    ab_callback(null, fullPath);
+  },
 });
 
 export const localsMiddleware = (req, res, next) => {
@@ -28,6 +41,7 @@ export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "Wetube";
   // 로그인을 하지 않아 아직 세션이 만들어지지 않았을 때 에러를 없애기 위해서 || {} 를 추가하여 빈 객체 생성
   res.locals.loggedInUser = req.session.user || {};
+  res.locals.isHeroku = isHeroku;
   next();
 };
 
@@ -55,7 +69,8 @@ export const avatarUpload = multer({
     // bytes: 3000000 = 3mb
     fileSize: 3000000,
   },
-  storage: s3ImageUploader,
+  // heroku에서 돌아갈 때는 S3를 이용하고, 아니면 dest에 저장하도록 함
+  storage: isHeroku ? s3ImageUploader : undefined,
 });
 
 export const videoUpload = multer({
@@ -63,5 +78,5 @@ export const videoUpload = multer({
   limits: {
     fileSize: 10000000,
   },
-  storage: s3VideoUploader,
+  storage: isHeroku ? s3VideoUploader : undefined,
 });
