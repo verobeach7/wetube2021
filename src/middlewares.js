@@ -11,6 +11,8 @@ const s3 = new S3Client({
 });
 
 const isHeroku = process.env.NODE_ENV === "production";
+console.log(process.env.NODE_ENV);
+console.log(isHeroku);
 
 const s3ImageUploader = multerS3({
   s3: s3,
