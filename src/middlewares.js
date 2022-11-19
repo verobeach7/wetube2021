@@ -1,6 +1,6 @@
+import { S3Client } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
-import { S3Client } from "@aws-sdk/client-s3";
 
 const s3 = new S3Client({
   region: "ap-northeast-2",
@@ -10,9 +10,15 @@ const s3 = new S3Client({
   },
 });
 
-const multerUploader = multerS3({
+const s3ImageUploader = multerS3({
   s3: s3,
-  bucket: "wetube-vero",
+  bucket: "wetube-vero/images",
+  acl: "public-read",
+});
+
+const s3VideoUploader = multerS3({
+  s3: s3,
+  bucket: "wetube-vero/videos",
   acl: "public-read",
 });
 
@@ -49,12 +55,13 @@ export const avatarUpload = multer({
     // bytes: 3000000 = 3mb
     fileSize: 3000000,
   },
-  storage: multerUploader,
+  storage: s3ImageUploader,
 });
+
 export const videoUpload = multer({
   dest: "uploads/videos/",
   limits: {
     fileSize: 10000000,
   },
-  storage: multerUploader,
+  storage: s3VideoUploader,
 });
