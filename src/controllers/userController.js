@@ -169,6 +169,7 @@ export const logout = (req, res) => {
 export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
+
 export const postEdit = async (req, res) => {
   let modifiedFileUrl = "";
   const pageTitle = "Edit Profile";
@@ -180,7 +181,9 @@ export const postEdit = async (req, res) => {
     file,
   } = req;
   const isHeroku = process.env.NODE_ENV === "production";
-  modifiedFileUrl = `https://${file.location.substr(20)}`;
+  modifiedFileUrl = isHeroku
+    ? `https://${file.location.substr(20)}`
+    : `/${file.path}`;
   if (username !== req.session.user.username) {
     const exists = await User.exists({ username });
     if (exists) {
@@ -203,7 +206,7 @@ export const postEdit = async (req, res) => {
     _id,
     {
       // file이 폼에 있다면 file.path로 경로를 바꿔주고 없다면 그대로 둠
-      avatarUrl: file ? (isHeroku ? modifiedFileUrl : file.path) : avatarUrl,
+      avatarUrl: file ? modifiedFileUrl : avatarUrl,
       name,
       email,
       username,

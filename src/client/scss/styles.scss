@@ -28,14 +28,37 @@ body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   background-color: $bg;
-  color: white;
+  color: $wh;
 }
 
 main {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 50px;
+  display: flex;
+  .guide {
+    padding: 0 40px 20px 40px;
+    width: 200px;
+    color: $wh;
+    display: flex;
+    flex-direction: column;
+    a {
+      padding: 15px 0;
+      display: flex;
+      i {
+        padding-right: 20px;
+      }
+    }
+  }
+  .line {
+    width: 200px;
+    border: 0.5px solid;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .video-grid {
+    padding: 10px 20px;
+    width: 100%;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 @keyframes goAway {

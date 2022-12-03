@@ -90,14 +90,18 @@ export const postUpload = async (req, res) => {
   const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   */
-  modifiedVideoUrl = `https://${video[0].location.substr(20)}`;
-  modifiedThumbUrl = `https://${thumb[0].location.substr(20)}`;
+  modifiedVideoUrl = isHeroku
+    ? `https://${video[0].location.substr(20)}`
+    : `/${video[0].path}`;
+  modifiedThumbUrl = isHeroku
+    ? `https://${thumb[0].location.substr(20)}`
+    : `/${thumb[0].path}`;
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: isHeroku ? modifiedVideoUrl : video[0].path,
-      thumbUrl: isHeroku ? modifiedThumbUrl : thumb[0].path,
+      fileUrl: modifiedVideoUrl,
+      thumbUrl: modifiedThumbUrl,
       owner: _id,
       hashtags: Video.formatHashtags(hashtags),
     });

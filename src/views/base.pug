@@ -16,6 +16,26 @@ html(lang="ko")
             +message("success", messages.success)
         include partials/header
         main
+            div.guide
+                a(href="/")
+                    i.fa-solid.fa-house 
+                    span  Home
+                a(href="/")
+                    i.fa-solid.fa-plus
+                    span  Subscriptions
+                a(href="/")
+                    i.fa-regular.fa-circle-play
+                    span  Originals
+                hr.line
+                a(href="/")
+                    i.fa-solid.fa-notes-medical
+                    span  Library
+                a(href="/")
+                    i.fa-solid.fa-clock-rotate-left
+                    span  History
+                a(href="/")
+                    i.fa-solid.fa-fire
+                    span  Trending
             block content
         include partials/footer
     script(src="/assets/js/main.js")
