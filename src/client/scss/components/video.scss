@@ -1,21 +1,36 @@
 // video mixin
-.video-mixin {
-  .video-mixin__thumb {
-    height: 160px;
-    border-radius: 7px;
-    width: 100%;
-    background-color: ivory;
+.video__container {
+  .video-mixin {
+    .video-mixin__thumb {
+      height: 160px;
+      border-radius: 7px;
+      width: 100%;
+      background-color: ivory;
+    }
   }
   .video-mixin__data {
-    padding: 0px 10px;
+    display: flex;
+    flex-direction: row;
+    .owner-pic {
+      padding: 18px 18px 0 0;
+    }
+    .video-mixin__avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50px;
+    }
+    .video-meta {
+      width: 100%;
+      padding-top: 12px;
+    }
     .video-mixin__title {
-      font-size: 18px;
+      font-size: 20px;
       display: block;
       margin-top: 10px;
     }
     .video-mixin__meta {
       margin-top: 5px;
-      font-size: 12px;
+      font-size: 16px;
       opacity: 0.7;
     }
   }
