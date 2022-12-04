@@ -66,6 +66,7 @@ const formatTime = (seconds) => {
 };
 
 const handleLoadedMetaData = () => {
+  console.log(video.duration);
   totalTime.innerText = formatTime(Math.floor(video.duration));
   timeline.max = Math.floor(video.duration);
   showControls();
