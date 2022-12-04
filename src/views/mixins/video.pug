@@ -1,7 +1,8 @@
 mixin video(video)
     div.video__container
         a(href=`/videos/${video.id}`).video-mixin
-            div.video-mixin__thumb(style=`background-image:url(${video.thumbUrl});background-size:cover;background-position:center`)
+            img.video-mixin__thumb(src=video.thumbUrl)
+            //- div.video-mixin__thumb(style=`background-image:url(${video.thumbUrl});background-size:cover;background-position:center`)
         div.video-mixin__data
             div.owner-pic
                 a(href=`/users/${video.owner.id}`)

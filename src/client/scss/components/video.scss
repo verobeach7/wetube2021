@@ -2,6 +2,7 @@
 .video__container {
   .video-mixin {
     .video-mixin__thumb {
+      object-fit: cover;
       height: 160px;
       border-radius: 7px;
       width: 100%;
