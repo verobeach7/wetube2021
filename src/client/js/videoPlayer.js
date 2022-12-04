@@ -66,6 +66,7 @@ const formatTime = (seconds) => {
 };
 
 const handleLoadedMetaData = () => {
+  console.log(video.readyState);
   if (video.readyState >= 2) {
     console.log(video.duration);
     totalTime.innerText = formatTime(Math.floor(video.duration));
