@@ -92,9 +92,8 @@ export const postUpload = async (req, res) => {
   const { path: fileUrl } = req.file;
   const { title, description, hashtags } = req.body;
   */
-  modifiedVideoUrl = isHeroku
-    ? `https://${video[0].location.substr(20)}`
-    : `/${video[0].path}`;
+  // `https://${video[0].location.substr(20)}`
+  modifiedVideoUrl = isHeroku ? `${video[0].location}` : `/${video[0].path}`;
   modifiedThumbUrl = isHeroku
     ? `https://${thumb[0].location.substr(20)}`
     : `/${thumb[0].path}`;
