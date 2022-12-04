@@ -66,10 +66,12 @@ const formatTime = (seconds) => {
 };
 
 const handleLoadedMetaData = () => {
-  console.log(video.duration);
-  totalTime.innerText = formatTime(Math.floor(video.duration));
-  timeline.max = Math.floor(video.duration);
-  showControls();
+  if (video.readyState >= 2) {
+    console.log(video.duration);
+    totalTime.innerText = formatTime(Math.floor(video.duration));
+    timeline.max = Math.floor(video.duration);
+    showControls();
+  }
 };
 
 const handleTimeUpdate = () => {
